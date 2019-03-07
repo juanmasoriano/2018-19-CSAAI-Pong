@@ -1,0 +1,16 @@
+body{
+  background-color: powderblue;
+}
+p{
+  margin-top: 40px;
+  text-align: center;
+  font-size: 35px;
+}
+button{
+  margin-left: 350px;
+}
+#display {
+  background-color: black;
+  margin-left: 350px;
+  margin-top: 80px;
+}
