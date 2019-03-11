@@ -62,13 +62,21 @@ var raqueta = {
       console.log(e.key);
 
       if (e.key == 'a') {
-          this.y1 = this.y1 - 6;
+        if (this.y1 > 0) {
+          this.y1 = this.y1 - 12;
+        }
       }else if (e.key == 'z') {
-        this.y1 = this.y1 + 6;
+        if (this.y1 < canvas.height - this.height) {
+          this.y1 = this.y1 + 12;
+        }
       }else if (e.key == 'k') {
-        this.y2 = this.y2 - 6;
+        if (this.y2 > 0) {
+          this.y2 = this.y2 - 12;
+        }
       }else if (e.key == 'm') {
-        this.y2 = this.y2 + 6;
+        if (this.y2 < canvas.height - this.height) {
+          this.y2 = this.y2 + 12;
+        }
       }
     }
   }
@@ -109,7 +117,8 @@ var bola = {
     this.ctx.fillRect(this.x, this.y, this.width, this.height);
   },
   update : function() {
-    if (this.x > canvas.width - this.width || this.x < 0) {
+    if (((this.x > raqueta.x2 - raqueta.width/2) && (this.x < raqueta.x2) && (this.y > raqueta.y2 - 15) && (this.y < raqueta.y2 + 40)) ||
+          (this.x < raqueta.x1 + raqueta.width/2) && (this.x > raqueta.x1) && (this.y > raqueta.y1 - 15) && (this.y < raqueta.y1 + 40)){
       this.vx = - this.vx;
     }
 
