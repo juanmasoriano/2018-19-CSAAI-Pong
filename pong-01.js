@@ -2,24 +2,28 @@ function main()
 {
   console.log("Pong: Main: Start!")
 
+  var score1 = 0;
+  var score2 = 0;
   var canvas = document.getElementById('display')
   canvas.width = 600;
   canvas.height = 400;
 
   var ctx = canvas.getContext("2d");
 
- ctx.font = "40px Arial";
-  ctx.fillStyle = 'white'
-  ctx.fillText("0", canvas.width/2 - 70, 60);
-  ctx.fillText("2", canvas.width/2 + 40, 60);
+  function draw_ctx(){
+    ctx.font = "40px Arial";
+    ctx.fillStyle = 'white'
+    ctx.fillText(score1, canvas.width/2 - 70, 60);
+    ctx.fillText(score2, canvas.width/2 + 40, 60);
 
 
-ctx.beginPath();
-ctx.strokeStyle = "white";
-ctx.setLineDash([5,5]);
-ctx.moveTo(canvas.width/2, 0);
-ctx.lineTo(canvas.width/2, canvas.height);
-ctx.stroke();
+    ctx.beginPath();
+    ctx.strokeStyle = "white";
+    ctx.setLineDash([5,5]);
+    ctx.moveTo(canvas.width/2, 0);
+    ctx.lineTo(canvas.width/2, canvas.height);
+    ctx.stroke();
+  }
 
 
 var raqueta = {
@@ -99,8 +103,7 @@ var bola = {
 
   ctx : null,
 
-  width : 8,
-  height : 8,
+  radius : 4,
 
   reset : function() {
     this.x = this.x_ini;
@@ -114,7 +117,9 @@ var bola = {
   },
   draw : function() {
     this.ctx.fillStyle = 'white';
-    this.ctx.fillRect(this.x, this.y, this.width, this.height);
+    this.ctx.beginPath();
+    this.ctx.arc(this.x, this.y, this.radius,0 , 2*Math.PI);
+    this.ctx.fill();
   },
   update : function() {
     if (((this.x > raqueta.x2 - raqueta.width/2) && (this.x < raqueta.x2) && (this.y > raqueta.y2 - 15) && (this.y < raqueta.y2 + 40)) ||
@@ -122,15 +127,14 @@ var bola = {
       this.vx = - this.vx;
     }
 
-    if (this.y > canvas.height - this.height || this.y < 0){
+    if (this.y > canvas.height - this.radius || this.y - this.radius < 0){
       this.vy = - this.vy;
     }
     this.x = this.x + this.vx;
     this.y = this.y + this.vy;
-
   }
 }
-
+draw_ctx();
 bola.init(ctx);
 bola.draw();
 raqueta.init(ctx);
@@ -152,6 +156,7 @@ sacar.onclick = ()=> {
       ctx.clearRect(0,0,canvas.width, canvas.height);
       bola.draw()
       raqueta.draw()
+
 
       //Condicion de terminacion
     }, 20);
