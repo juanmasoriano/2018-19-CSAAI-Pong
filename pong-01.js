@@ -8,30 +8,10 @@ function main()
 
   var ctx = canvas.getContext("2d");
 
-  window.onkeydown = (e) => {
-    e.preventDefault();
-
-    console.log(e.key);
-
-    if (e.key == 'a') {
-      console.log("Tecla a");
-    }
-  }
-
- //-- Raquetas
- ctx.fillStyle = 'white';
- ctx.fillRect(50,100, 10, 40)
-
- ctx.fillStyle = 'white';
- ctx.fillRect(550,100, 10, 40)
-
- ctx.font = "80px Arial";
+ ctx.font = "40px Arial";
   ctx.fillStyle = 'white'
-  ctx.fillText("0", 200, 80);
-
-  ctx.font = "80px Arial";
-   ctx.fillStyle = 'white'
-   ctx.fillText("2", 350, 80);
+  ctx.fillText("0", canvas.width/2 - 70, 60);
+  ctx.fillText("2", canvas.width/2 + 40, 60);
 
 
 ctx.beginPath();
@@ -42,11 +22,63 @@ ctx.lineTo(canvas.width/2, canvas.height);
 ctx.stroke();
 
 
+var raqueta = {
+
+  width : 10,
+  height : 40,
+
+  x1 : 30,
+  y_ini1 : canvas.height/2 - 40/2,
+
+  x2 : canvas.width - 30 - 10,
+  y_ini2 : canvas.height/2 - 40/2,
+
+  y1 : 0,
+  y2 : 0,
+
+  ctx : null,
+
+  reset : function() {
+    this.x1 = this.x1;
+    this.y1 = this.y_ini1;
+
+    this.x2 = this.x2;
+    this.y2 = this.y_ini2;
+  },
+  init : function(ctx) {
+    console.log("Bola: init");
+    this.reset();
+    this.ctx = ctx;
+  },
+  draw : function() {
+    this.ctx.fillStyle = 'white';
+    this.ctx.fillRect(this.x1, this.y1, this.width, this.height);
+    this.ctx.fillRect(this.x2, this.y2, this.width, this.height);
+  },
+  update : function() {
+    window.onkeydown = (e) => {
+      e.preventDefault();
+
+      console.log(e.key);
+
+      if (e.key == 'a') {
+          this.y1 = this.y1 - 6;
+      }else if (e.key == 'z') {
+        this.y1 = this.y1 + 6;
+      }else if (e.key == 'k') {
+        this.y2 = this.y2 - 6;
+      }else if (e.key == 'm') {
+        this.y2 = this.y2 + 6;
+      }
+    }
+  }
+}
+
 // Bola
 var bola = {
 
-  x_ini : 50,
-  y_ini : 50,
+  x_ini : 30 + raqueta.width + 10,
+  y_ini : 80,
 
   x : 0,
   y : 0,
@@ -92,6 +124,8 @@ var bola = {
 
 bola.init(ctx);
 bola.draw();
+raqueta.init(ctx);
+raqueta.draw();
 
 var timer = null;
 
@@ -104,24 +138,14 @@ sacar.onclick = ()=> {
     timer = setInterval( ()=>{
       //Actualizar bola
       bola.update()
+      raqueta.update()
       //Borrar canvas
       ctx.clearRect(0,0,canvas.width, canvas.height);
       bola.draw()
+      raqueta.draw()
 
       //Condicion de terminacion
     }, 20);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 }
