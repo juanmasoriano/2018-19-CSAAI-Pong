@@ -12,10 +12,6 @@ function main()
 
   function draw_ctx(){
     ctx.font = "40px Arial";
-    ctx.fillStyle = 'white'
-    ctx.fillText(score1, canvas.width/2 - 70, 60);
-    ctx.fillText(score2, canvas.width/2 + 40, 60);
-
 
     ctx.beginPath();
     ctx.strokeStyle = "white";
@@ -24,6 +20,34 @@ function main()
     ctx.lineTo(canvas.width/2, canvas.height);
     ctx.stroke();
   }
+
+var marcador = {
+  width1 : canvas.width/2 - 70,
+  width2 : canvas.width/2 + 40,
+
+  height : 60,
+
+  score1 : 0,
+  score2 : 0,
+
+  ctx : null,
+
+  reset : function() {
+    this.score1 = 0;
+    this.score2 = 0;
+  },
+
+  init : function(ctx) {
+    this.reset();
+    this.ctx = ctx;
+  },
+
+  draw : function() {
+    this.ctx.fillStyle = 'white';
+    this.ctx.fillText(this.score1, this.width1, this.height);
+    this.ctx.fillText(this.score2, this.width2, this.height);
+  },
+}
 
 
 var raqueta = {
@@ -67,19 +91,19 @@ var raqueta = {
 
       if (e.key == 'a') {
         if (this.y1 > 0) {
-          this.y1 = this.y1 - 12;
+          this.y1 = this.y1 - 19;
         }
       }else if (e.key == 'z') {
         if (this.y1 < canvas.height - this.height) {
-          this.y1 = this.y1 + 12;
+          this.y1 = this.y1 + 19;
         }
       }else if (e.key == 'k') {
         if (this.y2 > 0) {
-          this.y2 = this.y2 - 12;
+          this.y2 = this.y2 - 19;
         }
       }else if (e.key == 'm') {
         if (this.y2 < canvas.height - this.height) {
-          this.y2 = this.y2 + 12;
+          this.y2 = this.y2 + 19;
         }
       }
     }
@@ -108,6 +132,8 @@ var bola = {
   reset : function() {
     this.x = this.x_ini;
     this.y = this.y_ini;
+    this.vx = 4;
+    this.vy = 1;
   },
 
   init : function(ctx) {
@@ -130,11 +156,23 @@ var bola = {
     if (this.y > canvas.height - this.radius || this.y - this.radius < 0){
       this.vy = - this.vy;
     }
+    if (this.x > canvas.width){
+
+      marcador.score1 = marcador.score1 + 1;// Si alguien anota se reinicia la pagina.
+      bola.init(ctx);
+      raqueta.init(ctx);
+    } else if(this.x < 0) {
+      marcador.score2 = marcador.score2 + 1;
+      bola.init(ctx);
+      raqueta.init(ctx);
+    }
     this.x = this.x + this.vx;
     this.y = this.y + this.vy;
   }
 }
 draw_ctx();
+marcador.init(ctx);
+marcador.draw();
 bola.init(ctx);
 bola.draw();
 raqueta.init(ctx);
@@ -144,22 +182,26 @@ var timer = null;
 
 var sacar = document.getElementById('sacar');
 
-sacar.onclick = ()=> {
-  console.log("Click");
+function comenzar(){
+  sacar.onclick = ()=> {
+    console.log("Click");
   //Lanzar el timer si no estaba lanzado
-  if (!timer) {
-    timer = setInterval( ()=>{
+    if (!timer) {
+      timer = setInterval( ()=>{
       //Actualizar bola
-      bola.update()
-      raqueta.update()
+        bola.update()
+        raqueta.update()
       //Borrar canvas
-      ctx.clearRect(0,0,canvas.width, canvas.height);
-      bola.draw()
-      raqueta.draw()
+        ctx.clearRect(0,0,canvas.width, canvas.height);
+        bola.draw()
+        raqueta.draw()
+        marcador.draw();
 
 
       //Condicion de terminacion
-    }, 20);
+      }, 10);
+    }
   }
 }
+comenzar();
 }
