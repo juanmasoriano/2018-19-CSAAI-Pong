@@ -2,9 +2,14 @@ body{
   background-color: powderblue;
 }
 p{
-  margin-top: 40px;
+  margin-top: 30px;
   text-align: center;
   font-size: 35px;
+}
+p.controles{
+  margin-top: 5px;
+  text-align: center;
+  font-size: 18px;
 }
 button{
   margin-left: 350px;
@@ -12,5 +17,5 @@ button{
 #display {
   background-color: black;
   margin-left: 350px;
-  margin-top: 80px;
+  margin-top: 50px;
 }
