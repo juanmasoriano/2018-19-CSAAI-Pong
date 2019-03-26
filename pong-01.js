@@ -5,8 +5,8 @@ function main()
   var score1 = 0;
   var score2 = 0;
   var canvas = document.getElementById('display')
-  canvas.width = 600;
-  canvas.height = 400;
+  canvas.width = 800;
+  canvas.height = 500;
 
   var ctx = canvas.getContext("2d");
 
@@ -91,19 +91,19 @@ var raqueta = {
 
       if (e.key == 'a') {
         if (this.y1 > 0) {
-          this.y1 = this.y1 - 10;
+          this.y1 = this.y1 - 25;
         }
       }else if (e.key == 'z') {
         if (this.y1 < canvas.height - this.height) {
-          this.y1 = this.y1 + 10;
+          this.y1 = this.y1 + 25;
         }
       }else if (e.key == 'k') {
         if (this.y2 > 0) {
-          this.y2 = this.y2 - 10;
+          this.y2 = this.y2 - 25;
         }
       }else if (e.key == 'm') {
         if (this.y2 < canvas.height - this.height) {
-          this.y2 = this.y2 + 10;
+          this.y2 = this.y2 + 25;
         }
       }
     }
