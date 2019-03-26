@@ -91,19 +91,19 @@ var raqueta = {
 
       if (e.key == 'a') {
         if (this.y1 > 0) {
-          this.y1 = this.y1 - 19;
+          this.y1 = this.y1 - 10;
         }
       }else if (e.key == 'z') {
         if (this.y1 < canvas.height - this.height) {
-          this.y1 = this.y1 + 19;
+          this.y1 = this.y1 + 10;
         }
       }else if (e.key == 'k') {
         if (this.y2 > 0) {
-          this.y2 = this.y2 - 19;
+          this.y2 = this.y2 - 10;
         }
       }else if (e.key == 'm') {
         if (this.y2 < canvas.height - this.height) {
-          this.y2 = this.y2 + 19;
+          this.y2 = this.y2 + 10;
         }
       }
     }
@@ -122,6 +122,9 @@ var bola = {
   vx : 4,
   vy : 1,
 
+  n : 5,
+  m : 6,
+
   Dirx : 1,
   DirY : 1,
 
@@ -132,8 +135,8 @@ var bola = {
   reset : function() {
     this.x = this.x_ini;
     this.y = this.y_ini;
-    this.vx = 4;
-    this.vy = 1;
+    this.vx = (Math.random() * this.n) + 1;
+    this.vy = (Math.random() * this.m) + 1;;
   },
 
   init : function(ctx) {
@@ -148,8 +151,8 @@ var bola = {
     this.ctx.fill();
   },
   update : function() {
-    if (((this.x > raqueta.x2 - raqueta.width/2) && (this.x < raqueta.x2) && (this.y > raqueta.y2 - 15) && (this.y < raqueta.y2 + 40)) ||
-          (this.x < raqueta.x1 + raqueta.width/2) && (this.x > raqueta.x1) && (this.y > raqueta.y1 - 15) && (this.y < raqueta.y1 + 40)){
+    if (((this.x > raqueta.x2 - raqueta.width/2) && (this.x < raqueta.x2) && (this.y > raqueta.y2 - 10) && (this.y < raqueta.y2 + 40)) ||
+          (this.x < raqueta.x1 + raqueta.width/2) && (this.x > raqueta.x1) && (this.y > raqueta.y1 - 10) && (this.y < raqueta.y1 + 40)){
       this.vx = - this.vx;
     }
 
@@ -158,13 +161,19 @@ var bola = {
     }
     if (this.x > canvas.width){
 
-      marcador.score1 = marcador.score1 + 1;// Si alguien anota se reinicia la pagina.
-      bola.init(ctx);
-      raqueta.init(ctx);
+      marcador.score1 = marcador.score1 + 1;
+      clearInterval(timer);
+      timer = null;
+      bola.reset();
+      raqueta.reset();
+      ctx.clearRect(0,0,canvas.width, canvas.height);
     } else if(this.x < 0) {
       marcador.score2 = marcador.score2 + 1;
-      bola.init(ctx);
-      raqueta.init(ctx);
+      clearInterval(timer);
+      timer = null;
+      bola.reset();
+      raqueta.reset();
+      ctx.clearRect(0,0,canvas.width, canvas.height);
     }
     this.x = this.x + this.vx;
     this.y = this.y + this.vy;
@@ -196,6 +205,7 @@ function comenzar(){
         bola.draw()
         raqueta.draw()
         marcador.draw();
+        draw_ctx();
 
 
       //Condicion de terminacion
