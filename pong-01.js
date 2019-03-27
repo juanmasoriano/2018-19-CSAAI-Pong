@@ -113,8 +113,13 @@ var raqueta = {
 // Bola
 var bola = {
 
-  x_ini : 30 + raqueta.width + 10,
-  y_ini : 80,
+  x_ini_izq : 30 + raqueta.width + 10,
+  y_ini_izq : 80,
+
+  x_ini_dcha : raqueta.x2 - 10,
+  y_ini_dcha : 80,
+
+  lado : "",
 
   x : 0,
   y : 0,
@@ -133,10 +138,17 @@ var bola = {
   radius : 4,
 
   reset : function() {
-    this.x = this.x_ini;
-    this.y = this.y_ini;
-    this.vx = (Math.random() * this.n) + 1;
-    this.vy = (Math.random() * this.m) + 1;;
+    if (this.lado == "") {
+      this.x = this.x_ini_izq;
+      this.y = this.y_ini_izq;
+      this.vx = (Math.random() * this.n) + 1;
+      this.vy = (Math.random() * this.m) + 1;
+    }else if (this.lado == "derecha") {
+      this.x = this.x_ini_dcha;
+      this.y = this.y_ini_dcha;
+      this.vx = -((Math.random() * this.n) + 1);
+      this.vy = (Math.random() * this.m) + 1;
+    }
   },
 
   init : function(ctx) {
@@ -162,6 +174,7 @@ var bola = {
     if (this.x > canvas.width){
 
       marcador.score1 = marcador.score1 + 1;
+      this.lado = "derecha";
       clearInterval(timer);
       timer = null;
       bola.reset();
@@ -169,6 +182,7 @@ var bola = {
       ctx.clearRect(0,0,canvas.width, canvas.height);
     } else if(this.x < 0) {
       marcador.score2 = marcador.score2 + 1;
+      this.lado = "";
       clearInterval(timer);
       timer = null;
       bola.reset();
